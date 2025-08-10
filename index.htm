@@ -1,0 +1,135 @@
+<!-- templates/index.html -->
+<!-- This is the HTML frontend. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            transition: all 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #005a78;
+        }
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #2193b0;
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #2193b0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1c7a91;
+        }
+        .weather-info {
+            margin-top: 1.5rem;
+        }
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+        }
+        .temperature {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        .condition {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            text-transform: capitalize;
+        }
+        .details {
+            display: flex;
+            justify-content: space-around;
+            text-align: left;
+        }
+        .error {
+            color: #d9534f;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Real-Time Weather</h1>
+        <form action="/" method="post" class="search-form">
+            <input type="text" name="city" placeholder="Enter city name..." required>
+            <button type="submit">Get Weather</button>
+        </form>
+
+        <!-- This section will only display if weather data is available -->
+        {% if weather %}
+            {% if weather.error %}
+                <p class="error">{{ weather.error }}</p>
+            {% else %}
+                <div class="weather-info">
+                    <h2>{{ weather.city }}, {{ weather.country }}</h2>
+                    <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Weather icon" class="weather-icon">
+                    <div class="temperature">{{ "%.1f"|format(weather.temperature_celsius) }}°C</div>
+                    <div class="condition">{{ weather.condition }}</div>
+                    <div class="details">
+                        <div>
+                            <p><strong>Feels Like:</strong> {{ "%.1f"|format(weather.feels_like_celsius) }}°C</p>
+                        </div>
+                        <div>
+                            <p><strong>Humidity:</strong> {{ weather.humidity_percent }}%</p>
+                            <p><strong>Wind:</strong> {{ "%.1f"|format(weather.wind_kph) }} km/h</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+
+</body>
+</html>
